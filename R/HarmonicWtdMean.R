@@ -8,5 +8,5 @@ HarmonicWtdMean <- function (y, tr, tl, block, ...) {
                           Nt <- sum(tr == tl),
                           Nc <- sum(tr != tl),
                           wt = 2 * Nt * Nc / (Nt + Nc))
-  return(weighted.mean(sdf$diff, sdf$wt))
+  return(stats::weighted.mean(sdf$diff, sdf$wt))
 }

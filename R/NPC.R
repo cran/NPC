@@ -37,7 +37,7 @@ NPC <- function (data, ## Data frame with treatment, response, and other vars.
   ## Subset data
   keep.vars <- c(tr.var, y.vars, block.var, clust.var, event.var)
   if (na.rm) {
-    newdata <- na.omit(data[keep, keep.vars])
+    newdata <- stats::na.omit(data[keep, keep.vars])
     n.drops <- nrow(data) - nrow(newdata)
     cat('\nNumber of observations deleted due to missingness:', n.drops, '\n')
     data <- newdata
@@ -88,7 +88,10 @@ NPC <- function (data, ## Data frame with treatment, response, and other vars.
   set.seed(seed)
   ## Permute clusters within blocks
   hw <- permute::how(blocks = block.var[cl.obs], maxperm = n.perms)
-  cl.obs.shuffle <- permute::shuffleSet(n = length(cl.obs), nset = n.perms, control = hw)
+  cl.obs.shuffle <- permute::shuffleSet(n = length(cl.obs),
+                                        nset = n.perms, control = hw)
+  ## Add observed permutation
+  cl.obs.shuffle <- rbind(seq_along(cl.obs), cl.obs.shuffle)
   O <- apply(cl.obs.shuffle, 1, function (i) Tr[cl.obs][i])
   Omega <- apply(O, 2, function (x) x[match(clust.var, clust.var[cl.obs])])
   actual.n.perms <- ncol(Omega)

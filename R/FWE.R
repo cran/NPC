@@ -1,3 +1,4 @@
+#' @export
 FWE <- function(PV, stepdown=TRUE, cfun=NULL) {
   B <- dim(PV)[1] - 1
   P <- dim(PV)[2]

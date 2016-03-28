@@ -1,3 +1,4 @@
+#' @export
 NPC <- function (data, ## Data frame with treatment, response, and other vars.
                  keep = TRUE, ## Subset of observations (default keeps all)
                  tr.var, ## Name of treatment variable (character)
@@ -93,7 +94,7 @@ NPC <- function (data, ## Data frame with treatment, response, and other vars.
   ## Add observed permutation
   cl.obs.shuffle <- rbind(seq_along(cl.obs), cl.obs.shuffle)
   O <- apply(cl.obs.shuffle, 1, function (i) Tr[cl.obs][i])
-  Omega <- apply(O, 2, function (x) x[match(clust.var, clust.var[cl.obs])])
+  Omega <- apply(O, 2, function (x) x[match(blcl, blcl[cl.obs])])
   actual.n.perms <- ncol(Omega)
   T0 <- vector("numeric", n.tests)
   TP <- matrix(NA, ncol = n.tests, nrow = actual.n.perms)
@@ -105,11 +106,11 @@ NPC <- function (data, ## Data frame with treatment, response, and other vars.
     ## observed value of test statistic(s)
     stat.j <- test.statistic[[j]]
     T0[j] <- stat.j(y = Y[, j], tr = Tr, tl = tr.label[j], event = event.var,
-                    block = block.var, clust = clust.var)
+                    block = block.var, clust = blcl)
     ## permutation distribution of test statistics
     TP[, j] <- apply(Omega, 2, function (z) {
       stat.j(y = Y[, j], tr = z, tl = tr.label[j], event = event.var,
-             block = block.var, clust = clust.var)
+             block = block.var, clust = blcl)
     })
   }
   if (!is.null(colnames(Y))) names(T0) <- colnames(TP) <- colnames(Y)
@@ -130,7 +131,8 @@ NPC <- function (data, ## Data frame with treatment, response, and other vars.
   } 
   ## Partial p-values
   p.raw <- as.matrix(t2p(T0P))
-  rownames(p.raw) <- 0:actual.n.perms
+  rownames(T0P) <- c("Observed", paste("Perm", 1:actual.n.perms))
+  rownames(p.raw) <- c("Observed", paste("Perm", 1:actual.n.perms))
   if (is.null(colnames(Y))) {
     colnames(p.raw) <- paste0("p", 1:n.tests)
   } else {

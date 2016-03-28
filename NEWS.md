@@ -1,1 +1,1 @@
-FIxed enumeration of permutation space in the NPC function to ensure that the observed permutation is included.
+Fixed problem that appeared when analyzing data matched with replacement, in which control observations could appear in mutliple matched strata. Now, each copy of the obsevation is permuted independently.

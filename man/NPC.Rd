@@ -43,7 +43,7 @@ Combining function (character or function)
 }
   \item{n.perms}{
 %%     ~~Describe \code{n.perms} here~~
-Number of permutations
+Number of permutations, in addition to the one observed
 }
   \item{block.var}{
 %%     ~~Describe \code{block.var} here~~
@@ -107,7 +107,7 @@ Use the adaptive test of Hogg et al. (1975)? (logical vector)
 \item{T.matrix }{(optional) matrix containing the permutation distribution of test statistics}
 }
 \references{
-Caughey, Devin, Allan Dafoe, and Jason Seawright. 2014. ``Global Tests of Complex Hypotheses: A Nonparametric Framework for Testing Elaborate Theories.'' Unpublished manuscript.
+Caughey, Devin, Allan Dafoe, and Jason Seawright. Forthcoming. ``Nonparametric Combination (NPC): A Framework for Testing Elaborate Theories.'' Journal of Politics.
 
 Chung, EunYi, and Joseph P. Romano. 2013. ``Exact and Asymptotically Robust Permutation Tests.'' Annals of Statistics 41 (2): 484-507.
 
@@ -123,16 +123,11 @@ Devin Caughey <devin.caughey@gmail.com>
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \examples{
-## Required by NPC package
-require(permute)
-require(plyr)
-require(dplyr)
-require(coin)
-require(matlab)
+
+library(NPC)
 ## Required for this example
-require(mvtnorm)
-require(xtable)
-require(car)
+library(mvtnorm)
+library(car)
 
 ## COVARIANCE = CORRELATION = 0.25
 cov <- 0.25
@@ -164,13 +159,13 @@ npc.out <- NPC(data=ex.dta, tr.var="Tr", tr.label=1,
                test.statistic="DiffMeans", FWE.adj=FALSE)
 round(npc.out$p.value, 2) ## one-sided
 ##>   Y1   Y2   Y3  NPC
-##> 0.24 0.05 0.07 0.08
+##> 0.25 0.05 0.07 0.08
 
 ## Compare with T-tests and MANOVA
 t.test(Y1 ~ Tr, var.equal = TRUE, alternative = "less")
 t.test(Y2 ~ Tr, var.equal = TRUE, alternative = "less")
 t.test(Y3 ~ Tr, var.equal = TRUE, alternative = "less")
-Anova(lm(cbind(Y1, Y2, Y3) ~ Tr)) ## two-sided
+car::Anova(lm(cbind(Y1, Y2, Y3) ~ Tr)) ## two-sided
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
